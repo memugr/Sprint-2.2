@@ -37,6 +37,11 @@ function buy(id) {
 
 // Exercise 2
 function cleanCart() {
+    cart = []
+
+    // Set total price to 0
+    total = 0
+    console.log('The cart is cleaned.')
 }
 
 // Exercise 3
