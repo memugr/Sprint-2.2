@@ -9,6 +9,30 @@ var total = 0;
 
 // Exercise 1
 function buy(id) {
+    // 1. Loop for to the array products to get the item to add to cart
+    // 2. Add found product to the cart array
+
+    const buyProduct = products.find(product => product.id === id)
+
+    // Check if product is found
+    if (buyProduct) {
+        
+        // Check if the prod. exists in the cart
+        const existsProduct = cart.find(product => product.id === id)
+
+        // Increase quantity if exists, otherwise, it adds a new quantity
+        if (existsProduct) {
+            existsProduct.quantity++
+        } else {
+            const newProduct = { ...buyProduct, quantity: 1 }
+            cart.push(newProduct)
+        }
+
+    // Update cart counter
+    var countProductElement = document.getElementById('count_product')
+    countProductElement.innerText = cart.reduce((total, product) => total + product.quantity, 0)
+    console.log(`${buyProduct.name} added to cart.`)
+    }
 }
 
 // Exercise 2
