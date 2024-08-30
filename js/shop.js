@@ -33,6 +33,11 @@ function buy(id) {
     countProductElement.innerText = cart.reduce((total, product) => total + product.quantity, 0)
     console.log(`${buyProduct.name} added to cart.`)
     }
+
+    // Recalculates the total price calling the function (from exercice 3) after updating the cart
+    total = calculateTotal()
+    totalPriceElement.innerText = total.toFixed(2)
+    console.log("Total: " + calculateTotal())
 }
 
 // Exercise 2
@@ -47,7 +52,9 @@ function cleanCart() {
 // Exercise 3
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
+    return cart.reduce((total, product) => total + product.price * product.quantity, 0)
 }
+var totalPriceElement = getElementById('total_price')
 
 // Exercise 4
 function applyPromotionsCart() {
