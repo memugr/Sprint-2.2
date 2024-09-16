@@ -4,6 +4,8 @@
 // ** Don't hesitate to seek help from your peers or your mentor if you still struggle with debugging.
 
 // Improved version of cartList. Cart is an array of products (objects), but each one has a quantity field to define its quantity, so these products are not repeated.
+
+//variables
 var cart = [];
 var total = 0;
 
@@ -42,6 +44,7 @@ function buy(id) {
 
 // Exercise 2
 function cleanCart() {
+    //Empty cart
     cart = []
 
     // Set total price to 0
@@ -54,11 +57,13 @@ function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
     return cart.reduce((total, product) => total + product.price * product.quantity, 0)
 }
-var totalPriceElement = getElementById('total_price')
+
+var totalPriceElement = document.getElementById('total_price')
 
 // Exercise 4
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
+    
 }
 
 // Exercise 5
