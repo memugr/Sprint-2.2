@@ -4,25 +4,26 @@
 // ** Don't hesitate to seek help from your peers or your mentor if you still struggle with debugging.
 
 // Improved version of cartList. Cart is an array of products (objects), but each one has a quantity field to define its quantity, so these products are not repeated.
-
-//variables
+// Global variables
 var cart = [];
 var total = 0;
+var totalPriceElement = document.getElementById('total_price')
 
 // Exercise 1
 function buy(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array
 
+    // Find a product in the products array using the provided id
     const buyProduct = products.find(product => product.id === id)
 
-    // Check if product is found
+    // Check if the product is found
     if (buyProduct) {
-        
+
         // Check if the prod. exists in the cart
         const existsProduct = cart.find(product => product.id === id)
 
-        // Increase quantity if exists, otherwise, it adds a new quantity
+        // Increase quantity if exists, otherwise, it adds a new quantity 1
         if (existsProduct) {
             existsProduct.quantity++
         } else {
@@ -30,10 +31,10 @@ function buy(id) {
             cart.push(newProduct)
         }
 
-    // Update cart counter
-    var countProductElement = document.getElementById('count_product')
-    countProductElement.innerText = cart.reduce((total, product) => total + product.quantity, 0)
-    console.log(`${buyProduct.name} added to cart.`)
+        // Update cart counter in UI
+        var countProductElement = document.getElementById('count_product')
+        countProductElement.innerText = cart.reduce((total, product) => total + product.quantity, 0)
+        console.log(`${buyProduct.name} added to cart.`)
     }
 
     // Recalculates the total price calling the function (from exercice 3) after updating the cart
@@ -44,12 +45,25 @@ function buy(id) {
 
 // Exercise 2
 function cleanCart() {
-    //Empty cart
-    cart = []
+    // Show alert if the cart is empty 
+    if (cart.length === 0) {
+        window.alert('There are no existing products in your shopping cart, try selecting a product.')
+        return
+    } else {
+        // Ask for confirmation
+        let confirmationUser = confirm('Would you like to empty your shopping cart?')
 
-    // Set total price to 0
-    total = 0
-    console.log('The cart is cleaned.')
+        if (confirmationUser) {
+            // Reset cart array and totals
+            cart = []
+            total = 0
+
+            // Update the UI to reflect the empty cart
+            document.getElementById('count_product').innerHTML = 0
+            document.getElementById('total_price').innerHTML = total.toFixed(2)
+            console.log('The cart is cleaned.')
+        }
+    }
 }
 
 // Exercise 3
@@ -58,12 +72,10 @@ function calculateTotal() {
     return cart.reduce((total, product) => total + product.price * product.quantity, 0)
 }
 
-var totalPriceElement = document.getElementById('total_price')
-
 // Exercise 4
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
-    
+
 }
 
 // Exercise 5
