@@ -8,6 +8,8 @@
 var cart = [];
 var total = 0;
 var totalPriceElement = document.getElementById('total_price')
+var cartListElement = document.getElementById('cart_list')
+var emptyCartElement = document.getElementById('defaultEmptyCart')
 
 // Exercise 1
 function buy(id) {
@@ -37,13 +39,16 @@ function buy(id) {
         console.log(`${buyProduct.name} added to cart.`)
     }
 
-    // Recalculates the total price calling the function (from exercice 3) after updating the cart
+    // Apply promotions before recalculating total
+    applyPromotionsCart()
+
+    // Recalculate total after promotions are applied
     total = calculateTotal()
     totalPriceElement.innerText = total.toFixed(2)
     console.log("Total: " + total)
 
-    // Calling applyPromotionsCart afterwards
-    applyPromotionsCart()
+    // Print the updated cart with promotions and total
+    printCart()
 }
 
 // Exercise 2
@@ -54,7 +59,7 @@ function cleanCart() {
         return
     } else {
         // Ask for confirmation
-        let confirmationUser = confirm('Would you like to empty your shopping cart?')
+        let confirmationUser = confirm('Oh! Are you sure you want to empty your shopping cart?')
 
         if (confirmationUser) {
             // Reset cart array and total
@@ -67,12 +72,16 @@ function cleanCart() {
             console.log('The cart is cleaned.')
         }
     }
+
+    //Calls function to reset the cartList to default
+    open_modal()
 }
 
 // Exercise 3
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
-    return cart.reduce((total, product) => total + product.price * product.quantity, 0)
+    // Calculate total price using the discountedPrice after applying promotions
+    return cart.reduce((total, product) => total + product.discountedPrice * product.quantity, 0);
 }
 
 // Exercise 4
@@ -102,7 +111,7 @@ function applyPromotionsCart() {
             product.discountedPrice = product.price
         }
 
-        // Optional: log the total discount for each product
+        // Additional log the total discount for each product
         const discount = product.price - product.discountedPrice
         console.log(`Discount for ${product.name}: $${discount * product.quantity}`)
     }
@@ -111,6 +120,29 @@ function applyPromotionsCart() {
 // Exercise 5
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
+    // Make sure it's empty before calling all the wexisting products
+    cartListElement.innerHTML = ''
+    emptyCartElement.innerHTML = ''
+
+    // Default message when cart is empty
+    if (cart.length === 0) {
+        emptyCartElement.innerHTML = '<p><center>Your shopping cart is empty at the moment.</p><center>'
+        return
+    }
+
+    // Create a row of product every time it's pressed
+    cart.forEach((product) => {
+        let itemRow = document.createElement('tr')
+        itemRow.innerHTML = `
+            <td class="text-center">${product.name}</td>
+            <td class="text-center">$${product.discountedPrice.toFixed(2)}</td>
+            <td class="text-center">${product.quantity}</td>
+            <td class="text-center">$${(product.discountedPrice * product.quantity).toFixed(2)}</td>
+        `
+
+        //Print the element row in the cartList
+        cartListElement.appendChild(itemRow)
+    })
 }
 
 // ** Nivell II **
@@ -121,5 +153,7 @@ function removeFromCart(id) {
 }
 
 function open_modal() {
-    printCart();
+    // Apply promotions before printing the cart
+    applyPromotionsCart()
+    printCart()
 }
