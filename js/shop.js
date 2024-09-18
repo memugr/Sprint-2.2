@@ -40,7 +40,10 @@ function buy(id) {
     // Recalculates the total price calling the function (from exercice 3) after updating the cart
     total = calculateTotal()
     totalPriceElement.innerText = total.toFixed(2)
-    console.log("Total: " + calculateTotal())
+    console.log("Total: " + total)
+
+    // Calling applyPromotionsCart afterwards
+    applyPromotionsCart()
 }
 
 // Exercise 2
@@ -54,7 +57,7 @@ function cleanCart() {
         let confirmationUser = confirm('Would you like to empty your shopping cart?')
 
         if (confirmationUser) {
-            // Reset cart array and totals
+            // Reset cart array and total
             cart = []
             total = 0
 
@@ -75,14 +78,40 @@ function calculateTotal() {
 // Exercise 4
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
+    // Loop through each product in the cart
+    for (let index = 0; index < cart.length; index++) {
+        const product = cart[index]
 
+        // Check if the any of the products has an offer
+        if (product.offer) {
+
+            // Check if the quantity meets the offer requirement (in products.js)
+            if (product.quantity >= product.offer.number) {
+                // Apply the discount and set the discounted price
+                product.discountedPrice = product.price - (product.price * (product.offer.percent / 100))
+                console.log('Discount applied for:', product.name)
+
+            } else {
+                // No discount applied, reset to original price
+                product.discountedPrice = product.price
+                console.log('Discount not applicable for:', product.name)
+            }
+
+        } else {
+            // If no offer, set discountedPrice to the original price
+            product.discountedPrice = product.price
+        }
+
+        // Optional: log the total discount for each product
+        const discount = product.price - product.discountedPrice
+        console.log(`Discount for ${product.name}: $${discount * product.quantity}`)
+    }
 }
 
 // Exercise 5
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
 }
-
 
 // ** Nivell II **
 
