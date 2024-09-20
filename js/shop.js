@@ -138,6 +138,10 @@ function printCart() {
             <td class="text-center">$${product.discountedPrice.toFixed(2)}</td>
             <td class="text-center">${product.quantity}</td>
             <td class="text-center">$${(product.discountedPrice * product.quantity).toFixed(2)}</td>
+            <td>
+                <button type="button" class="btn btn-outline-success btn-sm rounded-pill px-3" onclick="buy(${product.id})">+</button>
+                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="removeFromCart(${product.id})">-</button>
+            </td>
         `
 
         //Print the element row in the cartList
@@ -149,7 +153,39 @@ function printCart() {
 
 // Exercise 7
 function removeFromCart(id) {
+    // Find product by id in the cart
+    const indexProduct = cart.findIndex(product => product.id === id)
+    const product = cart[indexProduct]
 
+    // Rest quantity if the quantity is greater than 1
+    if (product.quantity >= 1) {
+        product.quantity--
+
+        // Remove item from the cart if the quantity becomes zero
+        if (product.quantity === 0) {
+            cart.splice(product, 1)
+        }
+
+        // Update cart counter in UI 
+        var countProductElement = document.getElementById('count_product')
+        countProductElement.innerText = cart.reduce((total, product) => total + product.quantity, 0)
+    }
+
+    // Final validation
+    if (cart.length === 0) {
+        total = 0
+        emptyCartElement.innerHTML = '<p><center>Your shopping cart is empty at the moment.</p><center>'
+    }
+
+    // Apply promotions before recalculating total
+    applyPromotionsCart()
+
+    // Recalculate total after promotions are applied
+    total = calculateTotal()
+    totalPriceElement.innerText = total.toFixed(2)
+
+    // Print the updated cart with promotions and total
+    printCart()
 }
 
 function open_modal() {
